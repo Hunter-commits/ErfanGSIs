@@ -14,11 +14,9 @@ echo "Create temp and cache dir"
 echo "Extracting Required Partitions . . . . "
 if [ $1 = "Generic" ]; then
 	bash $LOCALDIR/zip2img.sh $2 $outdir
- 	bash $LOCALDIR/zip2img.sh $2 $outdir --product
 	mv $outdir/system.img $outdir/system-old.img
 elif [ $1 = "MIUI" ]; then
 	bash $LOCALDIR/zip2img.sh $2 $outdir
- 	bash $LOCALDIR/zip2img.sh $2 $outdir --product
 	mv $outdir/system.img $outdir/system-old.img
 elif [ $1 = "OxygenOS" ]; then
         unzip $2 -d $tmpdir &> /dev/null
@@ -61,6 +59,20 @@ echo "Merging product . . . . "
 	umount $outdir/product
 	rmdir $outdir/product/
 	rm $outdir/product.img
+if [ -f "$outdir/system_ext.img" ]; then
+echo "Merging system_ext . . . . "
+            sudo mkdir $outdir/system_ext
+            mount -o ro $outdir/system_ext.img $outdir/system_ext/
+            rm -rf system/system_ext
+            rm -rf system/system/system_ext
+            mkdir system/system/system_ext
+            ln -s system/system_ext system/system_ext
+            cp -v -r -p $outdir/system_ext/* system/system/system_ext/ &> /dev/n$
+            sync
+            umount $outdir/system_ext
+            rmdir $outdir/system_ext/
+            rm $outdir/system_ext.img
+fi
 if [ $1 = "OxygenOS" ]; then
      if [ -f "$outdir/opproduct.img" ]; then
 	echo "Merging opproduct . . . . "
@@ -93,20 +105,6 @@ if [ $1 = "OxygenOS" ]; then
 	umount $outdir/vendor
 	rmdir $outdir/vendor/
 	rm $outdir/vendor.img
-     if [ -f "$outdir/system_ext.img" ]; then
-        echo "Merging system_ext . . . . "
-	    sudo mkdir $outdir/system_ext
-	    mount -o ro $outdir/system_ext.img $outdir/system_ext/
-	    rm -rf system/system_ext
-	    rm -rf system/system/system_ext
-	    mkdir system/system/system_ext
-	    ln -s system/system_ext system/system_ext
-	    cp -v -r -p $outdir/system_ext/* system/system/system_ext/ &> /dev/null
-	    sync
-	    umount $outdir/system_ext
-	    rmdir $outdir/system_ext/
-	    rm $outdir/system_ext.img
-     fi
 elif [ $1 = "Pixel" ]; then
 echo "Merging system_other . . . . "
 	mkdir $outdir/system_other
@@ -116,20 +114,6 @@ echo "Merging system_other . . . . "
 	umount $outdir/system_other
 	rmdir $outdir/system_other/
 	rm $outdir/system_other.img
-    if [ -f "$outdir/system_ext.img" ]; then
-        echo "Merging system_ext . . . . "
-	    mkdir $outdir/system_ext
-	    mount -o ro $outdir/system_ext.img $outdir/system_ext/
-	    rm -rf system/system_ext
-	    rm -rf system/system/system_ext
-	    mkdir system/system/system_ext
-	    ln -s system/system_ext system/system_ext
-	    cp -v -r -p $outdir/system_ext/* system/system/system_ext/ &> /dev/null
-	    sync
-	    umount $outdir/system_ext
-	    rmdir $outdir/system_ext/
-	    rm $outdir/system_ext.img
-    fi
 fi
 echo "Finalising "
         cp -r system working/ &> /dev/null

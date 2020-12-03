@@ -22,38 +22,10 @@ usage() {
 }
 
 
-PARTITIONS="system"
+romzip="$(realpath $1)"
+PARTITIONS=("system" "product" "system_ext")
 EXT4PARTITIONS="system"
 OTHERPARTITIONS=""
-
-POSITIONAL=()
-while [[ $# -gt 0 ]]
-do
-key="$1"
-case $key in
-    --vendor|-v)
-    PARTITIONS="vendor"
-    EXT4PARTITIONS="vendor"
-    shift
-    ;;
-    *)
-    POSITIONAL+=("$1")
-    shift
-    ;;
-esac
-case $key in
-    --product|-p)
-    PARTITIONS="product"
-    EXT4PARTITIONS="product"
-    shift
-    ;;
-    *)
-    POSITIONAL+=("$1")
-    shift
-    ;;
-esac
-done
-set -- "${POSITIONAL[@]}" # restore positional parameters
 
 if [ "$1" == "" ]; then
     echo "BRUH: Enter all needed parameters"
@@ -122,7 +94,7 @@ done
 
 if [[ $(7z l -ba $romzip | grep $PARTITIONS.new.dat) ]]; then
     echo "Aonly OTA detected"
-    for partition in $PARTITIONS; do
+    for partition in ${PARTITIONS[@]}; do
         7z e -y $romzip $partition.new.dat* $partition.transfer.list $partition.img 2>/dev/null >> $tmpdir/zip.log
         if [[ -f $partition.new.dat.1 ]]; then
             cat $partition.new.dat.{0..999} 2>/dev/null >> $partition.new.dat
