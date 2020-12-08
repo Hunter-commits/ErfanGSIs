@@ -38,8 +38,8 @@ dd if=/dev/zero of=$outdir/system.img bs=4k count=1048576
 mkfs.ext4 $outdir/system.img
 tune2fs -c0 -i0 $outdir/system.img
 echo "Merging system . . . . "
-	mkdir system
-	mkdir system-old
+	sudo mkdir system
+	sudo mkdir system-old
 	mount -o loop $outdir/system.img system/
 	mount -o ro $outdir/system-old.img system-old/
 	cp -v -r -p system-old/* system/ &> /dev/null
@@ -52,8 +52,8 @@ echo "Merging product . . . . "
         rm -rf system/product
         ln -s system/product system/product
         rm -rf system/system/product
-        mkdir system/system/product
-	mkdir $outdir/product
+        sudo mkdir system/system/product
+	sudo mkdir $outdir/product
 	mount -o ro $outdir/product.img $outdir/product
 	cp -v -r -p $outdir/product/* system/system/product/ &> /dev/null
 	sync
@@ -63,11 +63,11 @@ echo "Merging product . . . . "
 fi
 if [ -f "$outdir/system_ext.img" ]; then
 echo "Merging system_ext . . . . "
-            mkdir $outdir/system_ext
+            sudo mkdir $outdir/system_ext
             mount -o ro $outdir/system_ext.img $outdir/system_ext/
             rm -rf system/system_ext
             rm -rf system/system/system_ext
-            mkdir system/system/system_ext
+            sudo mkdir system/system/system_ext
             ln -s system/system_ext system/system_ext
             cp -v -r -p $outdir/system_ext/* system/system/system_ext/ &> /dev/n$
             sync
@@ -89,8 +89,8 @@ if [ $1 = "OxygenOS" ]; then
      if [ -f "$outdir/reserve.img" ]; then
 	echo "Merging reserve . . . . "
         rm -rf system/system/reserve
-        mkdir system/system/reserve
-	mkdir $outdir/reserve
+        sudo mkdir system/system/reserve
+	sudo mkdir $outdir/reserve
 	mount -o ro $outdir/reserve.img $outdir/reserve/
 	cp -v -r -p $outdir/reserve/* system/system/reserve/ &> /dev/null
 	sync
@@ -100,8 +100,8 @@ if [ $1 = "OxygenOS" ]; then
      if [ -f "$outdir/india.img" ]; then
 	echo "Merging india . . . . "
         rm -rf system/system/india
-        mkdir system/system/india
-	mkdir $outdir/india
+        sudo mkdir system/system/india
+	sudo mkdir $outdir/india
 	mount -o ro $outdir/india.img $outdir/india/
 	cp -v -r -p $outdir/india/* system/system/india/ &> /dev/null
 	sync
@@ -110,7 +110,7 @@ if [ $1 = "OxygenOS" ]; then
 	rm $outdir/india.img
      fi
 	echo "Merging overlays . . . . "
-	mkdir $outdir/vendor
+	sudo mkdir $outdir/vendor
 	mount -o ro $outdir/vendor.img $outdir/vendor/
 	cp -r $outdir/vendor/overlay $outdir
 	rm -rf $outdir/overlay/*.apk
@@ -122,7 +122,7 @@ if [ $1 = "OxygenOS" ]; then
 	rm $outdir/vendor.img
 elif [ $1 = "Pixel" ]; then
 echo "Merging system_other . . . . "
-	mkdir $outdir/system_other
+	sudo mkdir $outdir/system_other
 	mount -o ro $outdir/system_other.img $outdir/system_other/
 	cp -v -r -p $outdir/system_other/* system/system/ &> /dev/null
 	sync
