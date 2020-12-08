@@ -29,34 +29,27 @@ elif [ $1 = "Pixel" ]; then
 	simg2img $tmpdir/product.img $outdir/product.img
 	simg2img $tmpdir/system_other.img $outdir/system_other.img
  	if [ -f "$tmpdir/system_ext.img" ]; then
-	simg2img $tmpdir/system_ext.img $outdir/system_ext.img
+	    simg2img $tmpdir/system_ext.img $outdir/system_ext.img
 	fi
 fi
 rm -rf $tmpdir
-echo "Creating Dummy System Image . . . . "
-dd if=/dev/zero of=$outdir/system.img bs=4k count=1048576
-mkfs.ext4 $outdir/system.img
-tune2fs -c0 -i0 $outdir/system.img
 echo "Merging system . . . . "
-	sudo mkdir system
+	sudo mkdir system-new
 	sudo mkdir system-old
-	mount -o loop $outdir/system.img system/
 	mount -o ro $outdir/system-old.img system-old/
-	cp -v -r -p system-old/* system/ &> /dev/null
-	sync
+	cp -v -r -p system-old/* system-new/ &> /dev/null
 	umount system-old
-	rm $outdir/system-old.img
-        rmdir system-old/
+	rm -rf $outdir/system-old.img
+        rm -rf system-old/
 if [ -f "$outdir/product.img" ]; then
 echo "Merging product . . . . "
-        rm -rf system/product
-        ln -s system/product system/product
-        rm -rf system/system/product
-        sudo mkdir system/system/product
+        rm -rf system-new/product
+        ln -s system-new/product system-new/product
+        rm -rf system-new/system/product
+        sudo mkdir system-new/system/product
 	sudo mkdir $outdir/product
 	mount -o ro $outdir/product.img $outdir/product
-	cp -v -r -p $outdir/product/* system/system/product/ &> /dev/null
-	sync
+	cp -v -r -p $outdir/product/* system-new/system/product/ &> /dev/null
 	umount $outdir/product
 	rmdir $outdir/product/
 	rm $outdir/product.img
@@ -65,46 +58,42 @@ if [ -f "$outdir/system_ext.img" ]; then
 echo "Merging system_ext . . . . "
             sudo mkdir $outdir/system_ext
             mount -o ro $outdir/system_ext.img $outdir/system_ext/
-            rm -rf system/system_ext
-            rm -rf system/system/system_ext
-            sudo mkdir system/system/system_ext
-            ln -s system/system_ext system/system_ext
-            cp -v -r -p $outdir/system_ext/* system/system/system_ext/ &> /dev/n$
-            sync
+            rm -rf system-new/system_ext
+            rm -rf system-new/system/system_ext
+            sudo mkdir system-new/system/system_ext
+            ln -s system-new/system_ext system-new/system_ext
+            cp -v -r -p $outdir/system_ext/* system-new/system/system_ext/ &> /dev/n$
             umount $outdir/system_ext
-            rmdir $outdir/system_ext/
-            rm $outdir/system_ext.img
+            rm -rf $outdir/system_ext/
+            rm -rf $outdir/system_ext.img
 fi
 if [ $1 = "OxygenOS" ]; then
      if [ -f "$outdir/opproduct.img" ]; then
 	echo "Merging opproduct . . . . "
 	sudo mkdir $outdir/opproduct
 	mount -o ro $outdir/opproduct.img $outdir/opproduct/
-	cp -v -r -p $outdir/opproduct/* system/oneplus/ &> /dev/null
-	sync
+	cp -v -r -p $outdir/opproduct/* system-new/oneplus/ &> /dev/null
 	umount $outdir/opproduct
 	rmdir $outdir/opproduct/
 	rm $outdir/opproduct.img
      fi
      if [ -f "$outdir/reserve.img" ]; then
 	echo "Merging reserve . . . . "
-        rm -rf system/system/reserve
-        sudo mkdir system/system/reserve
+        rm -rf system-new/system/reserve
+        sudo mkdir system-new/system/reserve
 	sudo mkdir $outdir/reserve
 	mount -o ro $outdir/reserve.img $outdir/reserve/
-	cp -v -r -p $outdir/reserve/* system/system/reserve/ &> /dev/null
-	sync
+	cp -v -r -p $outdir/reserve/* system-new/system/reserve/ &> /dev/null
 	umount $outdir/reserve
 	rmdir $outdir/reserve/
 	rm $outdir/reserve.img
      if [ -f "$outdir/india.img" ]; then
 	echo "Merging india . . . . "
-        rm -rf system/system/india
-        sudo mkdir system/system/india
+        rm -rf system-new/system/india
+        sudo mkdir system-new/system/india
 	sudo mkdir $outdir/india
 	mount -o ro $outdir/india.img $outdir/india/
-	cp -v -r -p $outdir/india/* system/system/india/ &> /dev/null
-	sync
+	cp -v -r -p $outdir/india/* system-new/system/india/ &> /dev/null
 	umount $outdir/india
 	rmdir $outdir/india/
 	rm $outdir/india.img
@@ -114,8 +103,7 @@ if [ $1 = "OxygenOS" ]; then
 	mount -o ro $outdir/vendor.img $outdir/vendor/
 	cp -r $outdir/vendor/overlay $outdir
 	rm -rf $outdir/overlay/*.apk
-	cp -v -r -p $outdir/overlay/* system/system/product/overlay/ &> /dev/null
-	sync
+	cp -v -r -p $outdir/overlay/* system-new/system/product/overlay/ &> /dev/null
 	rm -rf $outdir/overlay
 	umount $outdir/vendor
 	rmdir $outdir/vendor/
@@ -124,16 +112,13 @@ elif [ $1 = "Pixel" ]; then
 echo "Merging system_other . . . . "
 	sudo mkdir $outdir/system_other
 	mount -o ro $outdir/system_other.img $outdir/system_other/
-	cp -v -r -p $outdir/system_other/* system/system/ &> /dev/null
-	sync
+	cp -v -r -p $outdir/system_other/* system-new/system/ &> /dev/null
 	umount $outdir/system_other
 	rmdir $outdir/system_other/
 	rm $outdir/system_other.img
 fi
 echo "Finalising "
-        cp -r system working/ &> /dev/null
-	umount system
+        cp -r system-new working/ &> /dev/null
         rm -rf cache
-	rm -rf system
-        rm -rf $outdir/system.img
-echo "Generated Dynamic Folder"
+	rm -rf system-new
+echo "Done . . . . "
