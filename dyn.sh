@@ -47,6 +47,7 @@ echo "Merging system . . . . "
 	umount system-old
 	rm $outdir/system-old.img
         rmdir system-old/
+if [ -f "$outdir/product.img" ]; then
 echo "Merging product . . . . "
         rm -rf system/product
         ln -s system/product system/product
@@ -59,6 +60,7 @@ echo "Merging product . . . . "
 	umount $outdir/product
 	rmdir $outdir/product/
 	rm $outdir/product.img
+fi
 if [ -f "$outdir/system_ext.img" ]; then
 echo "Merging system_ext . . . . "
             mkdir $outdir/system_ext
