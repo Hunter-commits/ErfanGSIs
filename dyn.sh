@@ -29,7 +29,7 @@ elif [ $1 = "Pixel" ]; then
 	simg2img $tmpdir/product.img $outdir/product.img
 	simg2img $tmpdir/system_other.img $outdir/system_other.img
  	if [ -f "$tmpdir/system_ext.img" ]; then
-	    simg2img $tmpdir/system_ext.img $outdir/system_ext.img
+	simg2img $tmpdir/system_ext.img $outdir/system_ext.img
 	fi
 fi
 rm -rf $tmpdir
@@ -52,7 +52,7 @@ echo "Merging product . . . . "
         ln -s system/product system/product
         rm -rf system/system/product
         mkdir system/system/product
-	sudo mkdir $outdir/product
+	mkdir $outdir/product
 	mount -o ro $outdir/product.img $outdir/product
 	cp -v -r -p $outdir/product/* system/system/product/ &> /dev/null
 	sync
@@ -61,7 +61,7 @@ echo "Merging product . . . . "
 	rm $outdir/product.img
 if [ -f "$outdir/system_ext.img" ]; then
 echo "Merging system_ext . . . . "
-            sudo mkdir $outdir/system_ext
+            mkdir $outdir/system_ext
             mount -o ro $outdir/system_ext.img $outdir/system_ext/
             rm -rf system/system_ext
             rm -rf system/system/system_ext
@@ -86,16 +86,29 @@ if [ $1 = "OxygenOS" ]; then
      fi
      if [ -f "$outdir/reserve.img" ]; then
 	echo "Merging reserve . . . . "
-	sudo mkdir $outdir/reserve
+        rm -rf system/system/reserve
+        mkdir system/system/reserve
+	mkdir $outdir/reserve
 	mount -o ro $outdir/reserve.img $outdir/reserve/
 	cp -v -r -p $outdir/reserve/* system/system/reserve/ &> /dev/null
 	sync
 	umount $outdir/reserve
 	rmdir $outdir/reserve/
 	rm $outdir/reserve.img
+     if [ -f "$outdir/india.img" ]; then
+	echo "Merging india . . . . "
+        rm -rf system/system/india
+        mkdir system/system/india
+	mkdir $outdir/india
+	mount -o ro $outdir/india.img $outdir/india/
+	cp -v -r -p $outdir/india/* system/system/india/ &> /dev/null
+	sync
+	umount $outdir/india
+	rmdir $outdir/india/
+	rm $outdir/india.img
      fi
 	echo "Merging overlays . . . . "
-	sudo mkdir $outdir/vendor
+	mkdir $outdir/vendor
 	mount -o ro $outdir/vendor.img $outdir/vendor/
 	cp -r $outdir/vendor/overlay $outdir
 	rm -rf $outdir/overlay/*.apk
@@ -121,4 +134,4 @@ echo "Finalising "
         rm -rf cache
 	rm -rf system
         rm -rf $outdir/system.img
-echo "Dynamic Script Done"
+echo "Generated Dynamic Folder"
