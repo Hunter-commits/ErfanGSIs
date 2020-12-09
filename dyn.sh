@@ -26,18 +26,20 @@ elif [ $1 = "Pixel" ]; then
         unzip $2 -d $tmpdir &> /dev/null
 	unzip $tmpdir/*/*.zip -d $tmpdir &> /dev/null
 	simg2img $tmpdir/system.img $outdir/system-old.img
-	simg2img $tmpdir/product.img $outdir/product.img
-	simg2img $tmpdir/system_other.img $outdir/system_other.img
+        simg2img $tmpdir/system_other.img $outdir/system_other.img
+	if [ -f "$tmpdir/product.img" ]; then
+        simg2img $tmpdir/product.img $outdir/product.img
+        fi
  	if [ -f "$tmpdir/system_ext.img" ]; then
-	    simg2img $tmpdir/system_ext.img $outdir/system_ext.img
+	simg2img $tmpdir/system_ext.img $outdir/system_ext.img
 	fi
 fi
 rm -rf $tmpdir
 echo "Merging system . . . . "
-	sudo mkdir system-new
-	sudo mkdir system-old
+	mkdir system-new
+	mkdir system-old
 	mount -o ro $outdir/system-old.img system-old/
-	cp -v -r -p system-old/* system-new/ &> /dev/null
+	cp -r system-old/* system-new/ &> /dev/null
 	umount system-old
 	rm -rf $outdir/system-old.img
         rm -rf system-old/
@@ -46,23 +48,23 @@ echo "Merging product . . . . "
         rm -rf system-new/product
         ln -s system-new/product system-new/product
         rm -rf system-new/system/product
-        sudo mkdir system-new/system/product
-	sudo mkdir $outdir/product
+        mkdir system-new/system/product
+	mkdir $outdir/product
 	mount -o ro $outdir/product.img $outdir/product
-	cp -v -r -p $outdir/product/* system-new/system/product/ &> /dev/null
+	cp -r $outdir/product/* system-new/system/product/ &> /dev/null
 	umount $outdir/product
-	rmdir $outdir/product/
-	rm $outdir/product.img
+	rm -rf $outdir/product/
+	rm -rf $outdir/product.img
 fi
 if [ -f "$outdir/system_ext.img" ]; then
 echo "Merging system_ext . . . . "
-            sudo mkdir $outdir/system_ext
+            mkdir $outdir/system_ext
             mount -o ro $outdir/system_ext.img $outdir/system_ext/
             rm -rf system-new/system_ext
             rm -rf system-new/system/system_ext
-            sudo mkdir system-new/system/system_ext
+            mkdir system-new/system/system_ext
             ln -s system-new/system_ext system-new/system_ext
-            cp -v -r -p $outdir/system_ext/* system-new/system/system_ext/ &> /dev/n$
+            cp -r $outdir/system_ext/* system-new/system/system_ext/ &> /dev/n$
             umount $outdir/system_ext
             rm -rf $outdir/system_ext/
             rm -rf $outdir/system_ext.img
@@ -70,55 +72,56 @@ fi
 if [ $1 = "OxygenOS" ]; then
      if [ -f "$outdir/opproduct.img" ]; then
 	echo "Merging opproduct . . . . "
-	sudo mkdir $outdir/opproduct
+	mkdir $outdir/opproduct
 	mount -o ro $outdir/opproduct.img $outdir/opproduct/
-	cp -v -r -p $outdir/opproduct/* system-new/oneplus/ &> /dev/null
+	cp -r $outdir/opproduct/* system-new/oneplus/ &> /dev/null
 	umount $outdir/opproduct
-	rmdir $outdir/opproduct/
-	rm $outdir/opproduct.img
+	rm -rf $outdir/opproduct/
+	rm -rf $outdir/opproduct.img
      fi
      if [ -f "$outdir/reserve.img" ]; then
 	echo "Merging reserve . . . . "
         rm -rf system-new/system/reserve
-        sudo mkdir system-new/system/reserve
-	sudo mkdir $outdir/reserve
+        mkdir system-new/system/reserve
+	mkdir $outdir/reserve
 	mount -o ro $outdir/reserve.img $outdir/reserve/
-	cp -v -r -p $outdir/reserve/* system-new/system/reserve/ &> /dev/null
+	cp -r $outdir/reserve/* system-new/system/reserve/ &> /dev/null
 	umount $outdir/reserve
-	rmdir $outdir/reserve/
-	rm $outdir/reserve.img
+	rm -rf $outdir/reserve/
+	rm -rf $outdir/reserve.img
+     fi
      if [ -f "$outdir/india.img" ]; then
 	echo "Merging india . . . . "
         rm -rf system-new/system/india
-        sudo mkdir system-new/system/india
-	sudo mkdir $outdir/india
+        mkdir system-new/system/india
+	mkdir $outdir/india
 	mount -o ro $outdir/india.img $outdir/india/
-	cp -v -r -p $outdir/india/* system-new/system/india/ &> /dev/null
+	cp -r $outdir/india/* system-new/system/india/ &> /dev/null
 	umount $outdir/india
-	rmdir $outdir/india/
-	rm $outdir/india.img
+	rm -rf $outdir/india/
+	rm -rf $outdir/india.img
      fi
-	echo "Merging overlays . . . . "
-	sudo mkdir $outdir/vendor
+echo "Merging overlays . . . . "
+	mkdir $outdir/vendor
 	mount -o ro $outdir/vendor.img $outdir/vendor/
 	cp -r $outdir/vendor/overlay $outdir
 	rm -rf $outdir/overlay/*.apk
-	cp -v -r -p $outdir/overlay/* system-new/system/product/overlay/ &> /dev/null
+	cp -r $outdir/overlay/* system-new/system/product/overlay/ &> /dev/null
 	rm -rf $outdir/overlay
 	umount $outdir/vendor
-	rmdir $outdir/vendor/
-	rm $outdir/vendor.img
+	rm -rf $outdir/vendor/
+	rm -rf $outdir/vendor.img
 elif [ $1 = "Pixel" ]; then
 echo "Merging system_other . . . . "
-	sudo mkdir $outdir/system_other
+	mkdir $outdir/system_other
 	mount -o ro $outdir/system_other.img $outdir/system_other/
-	cp -v -r -p $outdir/system_other/* system-new/system/ &> /dev/null
+	cp -r $outdir/system_other/* system-new/system/ &> /dev/null
 	umount $outdir/system_other
-	rmdir $outdir/system_other/
-	rm $outdir/system_other.img
+	rm -rf $outdir/system_other/
+	rm -rf $outdir/system_other.img
 fi
-echo "Finalising "
+echo "Finalising . . . . "
         cp -r system-new working/ &> /dev/null
         rm -rf cache
 	rm -rf system-new
-echo "Done . . . . "
+echo "Done"
