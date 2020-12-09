@@ -40,24 +40,24 @@ dd if=/dev/zero of=$outdir/system.img bs=4k count=1048576
 mkfs.ext4 $outdir/system.img
 tune2fs -c0 -i0 $outdir/system.img
 echo "Merging system . . . . "
-	mkdir system-new
+	mkdir system
 	mkdir system-old
-	mount -o loop $outdir/system.img system-new/
+	mount -o loop $outdir/system.img system/
 	mount -o ro $outdir/system-old.img system-old/
-	cp -v -r -p system-old/* system-new/ &> /dev/null
+	cp -v -r -p system-old/* system/ &> /dev/null
         sync
 	umount system-old
 	rm -rf $outdir/system-old.img
         rm -rf system-old/
 if [ -f "$outdir/product.img" ]; then
 echo "Merging product . . . . "
-        rm -rf system-new/product
-        ln -s system-new/product system-new/product
-        rm -rf system-new/system/product
-        mkdir system-new/system/product
+        rm -rf system/product
+        ln -s system/product system-new/product
+        rm -rf system/system/product
+        mkdir system/system/product
 	mkdir $outdir/product
 	mount -o ro $outdir/product.img $outdir/product
-	cp -v -r -p $outdir/product/* system-new/system/product/ &> /dev/null
+	cp -v -r -p $outdir/product/* system/system/product/ &> /dev/null
 	sync
         umount $outdir/product
 	rm -rf $outdir/product/
@@ -67,11 +67,11 @@ if [ -f "$outdir/system_ext.img" ]; then
 echo "Merging system_ext . . . . "
             mkdir $outdir/system_ext
             mount -o ro $outdir/system_ext.img $outdir/system_ext/
-            rm -rf system-new/system_ext
-            rm -rf system-new/system/system_ext
-            mkdir system-new/system/system_ext
-            ln -s system-new/system_ext system-new/system_ext
-            cp -v -r -p $outdir/system_ext/* system-new/system/system_ext/ &> /dev/n$
+            rm -rf system/system_ext
+            rm -rf system/system/system_ext
+            mkdir system/system/system_ext
+            ln -s system/system_ext system/system_ext
+            cp -v -r -p $outdir/system_ext/* system/system/system_ext/ &> /dev/n$
             sync
             umount $outdir/system_ext
             rm -rf $outdir/system_ext/
@@ -82,7 +82,7 @@ if [ $1 = "OxygenOS" ]; then
 	echo "Merging opproduct . . . . "
 	mkdir $outdir/opproduct
 	mount -o ro $outdir/opproduct.img $outdir/opproduct/
-	cp -v -r -p $outdir/opproduct/* system-new/oneplus/ &> /dev/null
+	cp -v -r -p $outdir/opproduct/* system/oneplus/ &> /dev/null
 	sync
         umount $outdir/opproduct
 	rm -rf $outdir/opproduct/
@@ -90,11 +90,11 @@ if [ $1 = "OxygenOS" ]; then
      fi
      if [ -f "$outdir/reserve.img" ]; then
 	echo "Merging reserve . . . . "
-        rm -rf system-new/system/reserve
-        mkdir system-new/system/reserve
+        rm -rf system/system/reserve
+        mkdir system/system/reserve
 	mkdir $outdir/reserve
 	mount -o ro $outdir/reserve.img $outdir/reserve/
-	cp -v -r -p $outdir/reserve/* system-new/system/reserve/ &> /dev/null
+	cp -v -r -p $outdir/reserve/* system/system/reserve/ &> /dev/null
 	sync
         umount $outdir/reserve
 	rm -rf $outdir/reserve/
@@ -102,11 +102,11 @@ if [ $1 = "OxygenOS" ]; then
      fi
      if [ -f "$outdir/india.img" ]; then
 	echo "Merging india . . . . "
-        rm -rf system-new/system/india
-        mkdir system-new/system/india
+        rm -rf system/system/india
+        mkdir system/system/india
 	mkdir $outdir/india
 	mount -o ro $outdir/india.img $outdir/india/
-	cp -v -r -p $outdir/india/* system-new/system/india/ &> /dev/null
+	cp -v -r -p $outdir/india/* system/system/india/ &> /dev/null
 	sync
         umount $outdir/india
 	rm -rf $outdir/india/
@@ -117,7 +117,7 @@ echo "Merging overlays . . . . "
 	mount -o ro $outdir/vendor.img $outdir/vendor/
 	cp -r $outdir/vendor/overlay $outdir
 	rm -rf $outdir/overlay/*.apk
-	cp -v -r -p $outdir/overlay/* system-new/system/product/overlay/ &> /dev/null
+	cp -v -r -p $outdir/overlay/* system/system/product/overlay/ &> /dev/null
 	sync
         rm -rf $outdir/overlay
 	umount $outdir/vendor
@@ -127,16 +127,16 @@ elif [ $1 = "Pixel" ]; then
 echo "Merging system_other . . . . "
 	mkdir $outdir/system_other
 	mount -o ro $outdir/system_other.img $outdir/system_other/
-	cp -v -r -p $outdir/system_other/* system-new/system/ &> /dev/null
+	cp -v -r -p $outdir/system_other/* system/system/ &> /dev/null
 	sync
         umount $outdir/system_other
 	rm -rf $outdir/system_other/
 	rm -rf $outdir/system_other.img
 fi
 echo "Finalising . . . . "
-        cp -r system-new working/ &> /dev/null
-        umount system-new
+        cp -r system working/ &> /dev/null
+        umount system
         rm -rf $outdir/system.img
         rm -rf cache
-	rm -rf system-new
+	rm -rf system
 echo "Done"
