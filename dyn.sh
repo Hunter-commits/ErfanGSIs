@@ -52,7 +52,7 @@ echo "Merging system . . . . "
 if [ -f "$outdir/product.img" ]; then
 echo "Merging product . . . . "
         rm -rf system/product
-        ln -s system/product system-new/product
+        ln -s system/product system/product
         rm -rf system/system/product
         mkdir system/system/product
 	mkdir $outdir/product
