@@ -35,11 +35,17 @@ elif [ $1 = "Pixel" ]; then
 	fi
 fi
 rm -rf $tmpdir
+echo "Creating Dummy System Image . . . . "
+dd if=/dev/zero of=$outdir/system.img bs=4k count=1048576
+mkfs.ext4 $outdir/system.img
+tune2fs -c0 -i0 $outdir/system.img
 echo "Merging system . . . . "
 	mkdir system-new
 	mkdir system-old
+	mount -o loop $outdir/system.img system-new/
 	mount -o ro $outdir/system-old.img system-old/
-	cp -r system-old/* system-new/ &> /dev/null
+	cp -v -r -p system-old/* system-new/ &> /dev/null
+        sync
 	umount system-old
 	rm -rf $outdir/system-old.img
         rm -rf system-old/
@@ -51,8 +57,9 @@ echo "Merging product . . . . "
         mkdir system-new/system/product
 	mkdir $outdir/product
 	mount -o ro $outdir/product.img $outdir/product
-	cp -r $outdir/product/* system-new/system/product/ &> /dev/null
-	umount $outdir/product
+	cp -v -r -p $outdir/product/* system-new/system/product/ &> /dev/null
+	sync
+        umount $outdir/product
 	rm -rf $outdir/product/
 	rm -rf $outdir/product.img
 fi
@@ -64,7 +71,8 @@ echo "Merging system_ext . . . . "
             rm -rf system-new/system/system_ext
             mkdir system-new/system/system_ext
             ln -s system-new/system_ext system-new/system_ext
-            cp -r $outdir/system_ext/* system-new/system/system_ext/ &> /dev/n$
+            cp -v -r -p $outdir/system_ext/* system-new/system/system_ext/ &> /dev/n$
+            sync
             umount $outdir/system_ext
             rm -rf $outdir/system_ext/
             rm -rf $outdir/system_ext.img
@@ -74,8 +82,9 @@ if [ $1 = "OxygenOS" ]; then
 	echo "Merging opproduct . . . . "
 	mkdir $outdir/opproduct
 	mount -o ro $outdir/opproduct.img $outdir/opproduct/
-	cp -r $outdir/opproduct/* system-new/oneplus/ &> /dev/null
-	umount $outdir/opproduct
+	cp -v -r -p $outdir/opproduct/* system-new/oneplus/ &> /dev/null
+	sync
+        umount $outdir/opproduct
 	rm -rf $outdir/opproduct/
 	rm -rf $outdir/opproduct.img
      fi
@@ -85,8 +94,9 @@ if [ $1 = "OxygenOS" ]; then
         mkdir system-new/system/reserve
 	mkdir $outdir/reserve
 	mount -o ro $outdir/reserve.img $outdir/reserve/
-	cp -r $outdir/reserve/* system-new/system/reserve/ &> /dev/null
-	umount $outdir/reserve
+	cp -v -r -p $outdir/reserve/* system-new/system/reserve/ &> /dev/null
+	sync
+        umount $outdir/reserve
 	rm -rf $outdir/reserve/
 	rm -rf $outdir/reserve.img
      fi
@@ -96,8 +106,9 @@ if [ $1 = "OxygenOS" ]; then
         mkdir system-new/system/india
 	mkdir $outdir/india
 	mount -o ro $outdir/india.img $outdir/india/
-	cp -r $outdir/india/* system-new/system/india/ &> /dev/null
-	umount $outdir/india
+	cp -v -r -p $outdir/india/* system-new/system/india/ &> /dev/null
+	sync
+        umount $outdir/india
 	rm -rf $outdir/india/
 	rm -rf $outdir/india.img
      fi
@@ -106,8 +117,9 @@ echo "Merging overlays . . . . "
 	mount -o ro $outdir/vendor.img $outdir/vendor/
 	cp -r $outdir/vendor/overlay $outdir
 	rm -rf $outdir/overlay/*.apk
-	cp -r $outdir/overlay/* system-new/system/product/overlay/ &> /dev/null
-	rm -rf $outdir/overlay
+	cp -v -r -p $outdir/overlay/* system-new/system/product/overlay/ &> /dev/null
+	sync
+        rm -rf $outdir/overlay
 	umount $outdir/vendor
 	rm -rf $outdir/vendor/
 	rm -rf $outdir/vendor.img
@@ -115,13 +127,16 @@ elif [ $1 = "Pixel" ]; then
 echo "Merging system_other . . . . "
 	mkdir $outdir/system_other
 	mount -o ro $outdir/system_other.img $outdir/system_other/
-	cp -r $outdir/system_other/* system-new/system/ &> /dev/null
-	umount $outdir/system_other
+	cp -v -r -p $outdir/system_other/* system-new/system/ &> /dev/null
+	sync
+        umount $outdir/system_other
 	rm -rf $outdir/system_other/
 	rm -rf $outdir/system_other.img
 fi
 echo "Finalising . . . . "
         cp -r system-new working/ &> /dev/null
+        umount system-new
+        rm -rf $outdir/system.img
         rm -rf cache
 	rm -rf system-new
 echo "Done"
