@@ -1,4 +1,5 @@
 #!/bin/bash
+#Written By @nnippon!, thanks for tools for help me make it ez
 
 #Variables
 LOCALDIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
@@ -6,7 +7,6 @@ payload_extractor="$LOCALDIR/payload/payload_dumper.py"
 outdir="$LOCALDIR/cache"
 tmpdir="$LOCALDIR/cache/tmp"
 
-#let's start
 echo "Create temp and cache dir"
 	mkdir -p "$outdir"
 	mkdir -p "$tmpdir"
@@ -65,17 +65,17 @@ echo "Merging product . . . . "
 fi
 if [ -f "$outdir/system_ext.img" ]; then
 echo "Merging system_ext . . . . "
-            mkdir $outdir/system_ext
-            mount -o ro $outdir/system_ext.img $outdir/system_ext/
-            rm -rf system/system_ext
-            rm -rf system/system/system_ext
-            mkdir system/system/system_ext
-            ln -s system/system_ext system/system_ext
-            cp -v -r -p $outdir/system_ext/* system/system/system_ext/ &> /dev/n$
-            sync
-            umount $outdir/system_ext
-            rm -rf $outdir/system_ext/
-            rm -rf $outdir/system_ext.img
+        mkdir $outdir/system_ext
+        mount -o ro $outdir/system_ext.img $outdir/system_ext/
+        rm -rf system/system_ext
+        rm -rf system/system/system_ext
+        mkdir system/system/system_ext
+        ln -s system/system_ext system/system_ext
+        cp -v -r -p $outdir/system_ext/* system/system/system_ext/ &> /dev/n$
+        sync
+        umount $outdir/system_ext
+        rm -rf $outdir/system_ext/
+        rm -rf $outdir/system_ext.img
 fi
 if [ $1 = "OxygenOS" ]; then
      if [ -f "$outdir/opproduct.img" ]; then
@@ -134,6 +134,7 @@ echo "Merging system_other . . . . "
 	rm -rf $outdir/system_other.img
 fi
 echo "Finalising . . . . "
+        mkdir working
         cp -r system working/ &> /dev/null
         umount system
         rm -rf $outdir/system.img
