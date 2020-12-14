@@ -76,9 +76,3 @@ rm -rf $1/app/Netflix_activation
 rm -rf $1/app/IdMipay
 rm -rf $1/app/AnalyticsCore
 rm -rf $1/data-app/MiCreditInStub
-
-rm -rf $1/priv-app/MiDrop
-rm -rf $1/data-app/MiuiDriveMode
-rm -rf $1/app/Mipay
-rm -rf $1/priv-app/MiuiScanner
-rm -rf $1/app/MiuiCompass
