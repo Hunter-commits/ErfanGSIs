@@ -63,6 +63,18 @@ echo "Merging product . . . . "
 	rm -rf $outdir/product/
 	rm -rf $outdir/product.img
 fi
+if [ -f "$outdir/my_product.img" ]; then
+echo "Merging my_product . . . . "
+        rm -rf system/my_product
+        mkdir system/my_product
+        mkdir $outdir/my_product
+        mount -o ro $outdir/my_product.img $outdir/my_product
+        cp -v -r -p $outdir/my_product/* system/my_product/ &> /dev/null
+        sync
+        umount $outdir/my_product
+        rm -rf $outdir/my_product/
+        rm -rf $outdir/my_product.img
+fi
 if [ -f "$outdir/system_ext.img" ]; then
 echo "Merging system_ext . . . . "
         mkdir $outdir/system_ext

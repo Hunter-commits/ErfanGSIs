@@ -23,7 +23,7 @@ usage() {
 
 
 romzip="$(realpath $1)"
-PARTITIONS=("system" "product" "system_ext")
+PARTITIONS=("system" "product" "system_ext" "my_product")
 EXT4PARTITIONS="system"
 OTHERPARTITIONS=""
 
