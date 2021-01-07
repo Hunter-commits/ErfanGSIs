@@ -1,5 +1,5 @@
 ## Welcome to my area, imma may help may no but m a big nub
-    Fell free to use but at least gib credits for all peru's that work hard for you!
+    Feel free to use but at least gib credits for all peru's that work hard for you!
 
 ## Credits
     This repo is just a clone from peru's everywhere and kang from them
@@ -9,9 +9,9 @@
     Thanks VegaZS for his python BoboBot and YukoSky for repo :)
 
 ## Downloads
-Download ported GSI's from here!: https://sourceforge.net/projects/nippongsi/files/  
-Join us in telegram!: https://t.me/nippongsi_support 
-For updates follow here!: https://t.me/nippongsi
+    Download ported GSI's from here!: https://sourceforge.net/projects/nippongsi/files/  
+    Join us in telegram!: https://t.me/nippongsi_support 
+    For updates follow here!: https://t.me/nippongsi
 
 ## Requirements
     Linux or Mac
