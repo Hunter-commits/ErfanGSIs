@@ -9,9 +9,9 @@
     Thanks VegaZS for his python BoboBot and YukoSky for repo :)
 
 ## Downloads
-    Download ported GSI's from here!: https://sourceforge.net/projects/nippongsi/files/  
-    Join us in telegram!: https://t.me/nippongsi_support 
-    For updates follow here!: https://t.me/nippongsi
+Download ported GSI's from here!: https://sourceforge.net/projects/nippongsi/files/  
+Join us in telegram!: https://t.me/nippongsi_support 
+For updates follow here!: https://t.me/nippongsi
 
 ## Requirements
     Linux or Mac
