@@ -13,10 +13,22 @@ echo "Create temp and cache dir"
 
 echo "Extracting Required Partitions . . . . "
 if [ $1 = "Generic" ]; then
-	bash $LOCALDIR/zip2img.sh $2 $outdir
-	mv $outdir/system.img $outdir/system-old.img
+        unzip $2 -d $tmpdir &> /dev/null
+        if [ -f "$tmpdir/payload.bin" ]
+        then
+        python $payload_extractor --out $outdir $tmpdir/payload.bin &> /dev/null
+        else
+        bash $LOCALDIR/zip2img.sh $2 $outdir
+        fi
+        mv $outdir/system.img $outdir/system-old.img
 elif [ $1 = "MIUI" ]; then
-	bash $LOCALDIR/zip2img.sh $2 $outdir
+	unzip $2 -d $tmpdir &> /dev/null
+        if [ -f "$tmpdir/payload.bin" ]
+        then
+        python $payload_extractor --out $outdir $tmpdir/payload.bin &> /dev/null
+        else
+        bash $LOCALDIR/zip2img.sh $2 $outdir
+        fi
 	mv $outdir/system.img $outdir/system-old.img
 elif [ $1 = "OxygenOS" ]; then
         unzip $2 -d $tmpdir &> /dev/null
