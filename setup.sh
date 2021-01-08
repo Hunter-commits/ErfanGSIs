@@ -9,9 +9,8 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
     else
        sudo apt install unace unrar zip unzip p7zip-full simg2img p7zip-rar sharutils rar uudeview mpack arj cabextract file-roller device-tree-compiler liblzma-dev python-pip brotli liblz4-tool gawk aria2 unace unrar zip unzip p7zip-full p7zip-rar sharutils rar uudeview mpack arj cabextract file-roller rename liblzma-dev python-pip brotli -y
     fi
-    pip3 install setuptools wheel
-    pip install backports.lzma protobuf pycrypto bsdiff4 docopt
+    pip install setuptools wheel backports.lzma protobuf pycrypto bsdiff4 docopt
 elif [[ "$OSTYPE" == "darwin"* ]]; then
     brew install protobuf xz brotli lz4 aria2
-    pip install backports.lzma protobuf pycrypto bsdiff4 docopt
+    pip install setuptools wheel backports.lzma protobuf pycrypto bsdiff4 docopt
 fi
